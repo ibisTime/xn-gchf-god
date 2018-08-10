@@ -28,33 +28,17 @@ class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      projectCodeList: '',
-      userKind: ''
+      projectCodeList: ''
     };
   }
   componentDidMount() {
-    let userKind = getUserKind();
-    this.setState({ userKind });
-    if (userKind === 'S') {
-      getUserDetail(getUserId()).then((data) => {
-        this.setState({ 'projectCodeList': data.projectCodeList });
-      });
-    }
+    getUserDetail(getUserId()).then((data) => {
+      this.setState({ 'projectCodeList': data.projectCodeList });
+    });
   }
   render() {
-    var btnEvent = {
-      addProject: (selectedRowKeys, selectedRows) => {
-        this.props.history.push(`/projectManage/project/addedit`);
-      },
-      Statistics: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/newProj/project/detail?v=1&code=${selectedRowKeys[0]}`);
-        }
-      },
+    const btnEvent = {
+      // 查看考勤
       attendance: (selectedRowKeys, selectedRows) => {
         if (!selectedRowKeys.length) {
           showWarnMsg('请选择记录');
@@ -64,15 +48,7 @@ class Map extends React.Component {
           this.props.history.push(`/projectManage/project/kaoqin?code=${selectedRowKeys[0]}`);
         }
       },
-      wages: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/projectManage/project/salary?projectCode=${selectedRowKeys[0]}`);
-        }
-      },
+      // 详情
       proDetail: (selectedRowKeys, selectedRows) => {
         if (!selectedRowKeys.length) {
           showWarnMsg('请选择记录');
@@ -80,60 +56,6 @@ class Map extends React.Component {
           showWarnMsg('请选择一条记录');
         } else {
           this.props.history.push(`/projectManage/project/addedit?v=1&projectCode=${selectedRowKeys[0]}`);
-        }
-      },
-      overTime: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/projectManage/project/end?v=1&projectCode=${selectedRowKeys[0]}`);
-        }
-      },
-      checkPro: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/projectManage/project/check?v=1&projectCode=${selectedRowKeys[0]}`);
-        }
-      },
-      overPro: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/projectManage/project/stop?stop=1&projectCode=${selectedRowKeys[0]}`);
-        }
-      },
-      kCard: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/projectManage/project/daka?projectCode=${selectedRowKeys[0]}`);
-        }
-      },
-      aWork: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/projectManage/project/stop?start=1&projectCode=${selectedRowKeys[0]}`);
-        }
-      },
-      progress: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/hetong/jindu/info?start=1&projectCode=${selectedRowKeys[0]}`);
         }
       },
       // 发薪可延迟天数
@@ -155,29 +77,22 @@ class Map extends React.Component {
       }
     };
     const fields = [{
+      field: 'name',
+      title: '工程名称'
+    }, {
       field: 'projectCode',
-      formatter: (v, d) => {
-        return d.name;
-      },
       title: '工程名称',
       type: 'select',
       search: true,
+      hidden: true,
       listCode: '631357',
       params: {
         updater: '',
-        kind: 'O'
+        projectCodeList: this.state.projectCodeList
       },
       keyName: 'code',
       valueName: 'name'
-    },
-    //   {
-    //   field: 'provinces',
-    //   title: '项目详细地址',
-    //   formatter: (v, d) => {
-    //     return d.province ? d.province + d.city + d.area: '';
-    //   }
-    // },
-      {
+    }, {
       field: 'startDatetime',
       title: '项目开始时间',
       type: 'datetime'
@@ -221,7 +136,8 @@ class Map extends React.Component {
         this.props.getPageData();
       }
     };
-    return this.state.projectCodeList && this.state.userKind ? (<div>{ this.props.buildList({
+    return this.state.projectCodeList ? (
+        <div>{ this.props.buildList({
           fields,
           btnEvent,
           searchParams: {

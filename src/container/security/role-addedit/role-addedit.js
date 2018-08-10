@@ -19,7 +19,6 @@ class MenuAddEdit extends React.Component {
     super(props);
     this.code = getQueryString('code', this.props.location.search);
     this.view = !!getQueryString('v', this.props.location.search);
-    this.type = getUserKind();
   }
   render() {
     const fields = [{
@@ -31,7 +30,7 @@ class MenuAddEdit extends React.Component {
       title: '类型',
       field: 'type',
       hidden: true,
-      value: this.type
+      value: 'S'
     }];
     return this.props.buildDetail({
       fields,

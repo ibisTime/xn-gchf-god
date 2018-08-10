@@ -35,21 +35,14 @@ class AllStaff extends React.Component {
     };
   }
   componentDidMount() {
-    if (getUserKind() === 'S') {
-      getUserDetail(getUserId()).then((data) => {
-        this.setState({
-          projectCodeList: data.projectCodeList,
-          province: data.province,
-          city: data.city,
-          area: data.area
-        });
+    getUserDetail(getUserId()).then((data) => {
+      this.setState({
+        projectCodeList: data.projectCodeList,
+        province: data.province,
+        city: data.city,
+        area: data.area
       });
-    };
-    if (getUserKind() === 'O') {
-      getUserDetail(getUserId()).then((data) => {
-        this.setState({ 'companyCode': data.companyCode });
-      });
-    };
+    });
   }
   render() {
     const fields = [{
@@ -79,15 +72,7 @@ class AllStaff extends React.Component {
       title: '备注'
     }];
     const btnEvent = {
-      error: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/staff/allStaff/error?staffCode=${selectedRowKeys[0]}`);
-        }
-      },
+      // 工作履历
       history: (selectedRowKeys, selectedRows) => {
         if (!selectedRowKeys.length) {
           showWarnMsg('请选择记录');
@@ -97,34 +82,7 @@ class AllStaff extends React.Component {
           this.props.history.push(`/staff/allStaff/history?staffCode=${selectedRowKeys[0]}`);
         }
       },
-      skill: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/staff/allStaff/skill?staffCode=${selectedRowKeys[0]}`);
-        }
-      },
-      // addWorkers: (selectedRowKeys, selectedRows) => {
-      //   console.log(selectedRowKeys, selectedRows);
-      //   if (!selectedRowKeys.length) {
-      //     showWarnMsg('请选择记录');
-      //   } else if (selectedRowKeys.length > 1) {
-      //     showWarnMsg('请选择一条记录');
-      //   } else {
-      //     this.props.history.push(`/staff/allStaff/entry?code=${selectedRowKeys[0]}`);
-      //   }
-      // },
-      weekday: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/staff/allStaff/weekday?code=${selectedRowKeys[0]}`);
-        }
-      },
+      // 请假明细
       leaveRecords: (selectedRowKeys, selectedRows) => {
         if (!selectedRowKeys.length) {
           showWarnMsg('请选择记录');
@@ -133,73 +91,19 @@ class AllStaff extends React.Component {
         } else {
           this.props.history.push(`/staff/allStaff/leaveRecords?staffCode=${selectedRowKeys[0]}`);
         }
-      },
-      quit: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/staff/allStaff/quit?code=${selectedRowKeys[0]}`);
-        }
-      },
-      addBankCard: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          console.log(selectedRows[0].bankCard);
-          if(selectedRows[0].bankCard === undefined) {
-            this.props.history.push(`/staff/allStaff/addBankCard?code=${selectedRowKeys[0]}&name=${selectedRows[0].name}`);
-          } else {
-            showWarnMsg('该员工已有工资卡，无法新增');
-          }
-        }
-      },
-      rejiandang: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/staff/jiandang/mianguanRead2?idNo=${selectedRows[0].idNo}&code=${selectedRows[0].code}`);
-        }
       }
     };
-    if (getUserKind() === 'O') {
-      return this.state.companyCode ? this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: {
-          updater: '',
-          kind: 'O',
-          companyCode: this.state.companyCode
-        },
-        pageCode: 631415
-      }) : null;
-    } else if(getUserKind() === 'S') {
-      return this.state.province && this.state.city && this.state.area ? this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: {
-          updater: '',
-          province: this.state.province,
-          city: this.state.city,
-          area: this.state.area
-        },
-        pageCode: 631415
-      }) : null;
-    } else {
-      return this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: {
-          updater: ''
-        },
-        pageCode: 631415
-      });
-    }
+    return this.state.province && this.state.city && this.state.area ? this.props.buildList({
+      fields,
+      btnEvent,
+      searchParams: {
+        updater: '',
+        province: this.state.province,
+        city: this.state.city,
+        area: this.state.area
+      },
+      pageCode: 631415
+    }) : null;
   }
 }
 

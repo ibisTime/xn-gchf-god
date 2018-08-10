@@ -33,7 +33,7 @@ class AlreadyQuest extends React.Component {
       bankName: '',
       projectCodeList: ''
     };
-    this.userKind = getUserKind();
+    this.userKind = 'S';
   };
   componentDidMount() {
     getUserDetail(getUserId()).then((data) => {
@@ -42,7 +42,6 @@ class AlreadyQuest extends React.Component {
         bankName: data.bankName,
         projectCodeList: data.projectCodeList
       });
-      console.log(data);
     });
   }
   render() {

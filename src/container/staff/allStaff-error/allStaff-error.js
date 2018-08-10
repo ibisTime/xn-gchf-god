@@ -1,5 +1,4 @@
 import React from 'react';
-import cookies from 'browser-cookies';
 import {
   setTableData,
   setPagination,
@@ -13,7 +12,7 @@ import {
 import { listWrapper } from 'common/js/build-list';
 import { showWarnMsg, showSucMsg, getQueryString, getUserKind, getUserId, moneyFormat } from 'common/js/util';
 import { getUserDetail } from 'api/user';
-
+// 事件处理-异常查看
 @listWrapper(
   state => ({
     ...state.staffAllStaffError,
@@ -36,15 +35,9 @@ class AllStaffError extends React.Component {
     this.staffCode = getQueryString('staffCode', this.props.location.search);
   }
   componentDidMount() {
-    if (getUserKind() === 'O') {
-      getUserDetail(getUserId()).then((data) => {
-        this.setState({ 'companyCode': data.companyCode });
-      });
-    } else if (getUserKind() === 'S') {
-      getUserDetail(getUserId()).then((data) => {
-        this.setState({ 'projectCodeList': data.projectCodeList });
-      });
-    }
+    getUserDetail(getUserId()).then((data) => {
+      this.setState({ 'projectCodeList': data.projectCodeList });
+    });
   }
   render() {
     const fields = [{
@@ -87,15 +80,6 @@ class AllStaffError extends React.Component {
       key: 'salary_status'
     }];
     const btnEvent = {
-      error: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/staff/allStaff/error?staffCode=${selectedRowKeys[0]}`);
-        }
-      },
       detail: (selectedRowKeys, selectedRows) => {
         if (!selectedRowKeys.length) {
           showWarnMsg('请选择记录');
@@ -106,50 +90,20 @@ class AllStaffError extends React.Component {
         }
       }
     };
-    if (getUserKind() === 'O') {
-      return this.state.companyCode ? this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: {
-          staffCode: this.staffCode,
-          type: '1',
-          companyCode: this.state.companyCode,
-          kind: 'O',
-          statusList: ['4', '6', '7']
-        },
-        buttons: [{
-          code: 'detail',
-          name: '详情'
-        }],
-        pageCode: 631445
-      }) : null;
-    } else if (getUserKind() === 'S') {
-      return this.state.projectCodeList ? this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: {
-          projectCodeList: this.state.projectCodeList,
-          kind: 'S',
-          statusList: ['4', '6', '7']
-        },
-        buttons: [{
-          code: 'detail',
-          name: '详情'
-        }],
-        pageCode: 631445
-      }) : null;
-    } else {
-      return this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: { staffCode: this.staffCode, type: 'P', statusList: ['4', '6', '7'] },
-        buttons: [{
-          code: 'detail',
-          name: '详情'
-        }],
-        pageCode: 631445
-      });
-    }
+    return this.state.projectCodeList ? this.props.buildList({
+      fields,
+      btnEvent,
+      searchParams: {
+        projectCodeList: this.state.projectCodeList,
+        kind: 'S',
+        statusList: ['4', '6', '7']
+      },
+      buttons: [{
+        code: 'detail',
+        name: '详情'
+      }],
+      pageCode: 631445
+    }) : null;
   }
 }
 

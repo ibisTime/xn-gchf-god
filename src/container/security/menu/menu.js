@@ -10,7 +10,6 @@ import {
   setSearchData
 } from '@redux/security/menu';
 import { listWrapper } from 'common/js/build-list';
-import { getUserKind } from 'common/js/util';
 
 @listWrapper(
   state => ({
@@ -23,13 +22,9 @@ import { getUserKind } from 'common/js/util';
 class Menu extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      userKind: ''
-    };
+    this.state = {};
   }
   componentDidMount() {
-    let userKind = getUserKind();
-    this.setState({ userKind });
   }
   render() {
     const fields = [{
@@ -66,15 +61,15 @@ class Menu extends React.Component {
       title: '菜单顺序',
       field: 'orderNo'
     }];
-    return this.state.userKind ? this.props.buildList({
+    return this.props.buildList({
       fields,
       searchParams: {
         updater: '',
-        systemCode: this.state.userKind
+        systemCode: 'S'
       },
       pageCode: 631065,
       deleteCode: 631061
-    }) : null;
+    });
   }
 }
 

@@ -42,11 +42,9 @@ class PostRequestAddedit extends React.Component {
     };
   }
   componentDidMount() {
-    if(cookies.get('loginKind') === 'S') {
-      getUserDetail(getUserId()).then((res) => {
-        this.setState({ projectCodeList: res.projectCodeList });
-      });
-    }
+    getUserDetail(getUserId()).then((res) => {
+      this.setState({ projectCodeList: res.projectCodeList });
+    });
     detailDate(this.code).then((data) => {
       this.setState({
         bankcardNumber: data.bankcardNumber,

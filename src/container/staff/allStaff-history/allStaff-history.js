@@ -1,5 +1,4 @@
 import React from 'react';
-import cookies from 'browser-cookies';
 import {
   setTableData,
   setPagination,
@@ -13,7 +12,7 @@ import {
 import { listWrapper } from 'common/js/build-list';
 import { showWarnMsg, showSucMsg, getQueryString, getUserId, getUserKind } from 'common/js/util';
 import { getUserDetail } from 'api/user';
-
+// 事件处理-历史事件
 @listWrapper(
   state => ({
     ...state.staffAllStaffHistory,
@@ -28,7 +27,6 @@ class AllStaffHistory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      companyCode: '',
       projectCodeList: ''
     };
     this.code = getQueryString('code', this.props.location.search);
@@ -36,17 +34,9 @@ class AllStaffHistory extends React.Component {
     this.staffCode = getQueryString('staffCode', this.props.location.search);
   }
   componentDidMount() {
-    if (getUserKind() === 'O') {
-      getUserDetail(getUserId()).then((data) => {
-        console.log(data);
-        this.setState({ 'companyCode': data.companyCode, 'updater': '' });
-      });
-    }
-    if (getUserKind() === 'S') {
-      getUserDetail(getUserId()).then((data) => {
-        this.setState({ 'projectCodeList': data.projectCodeList, 'updater': '' });
-      });
-    }
+    getUserDetail(getUserId()).then((data) => {
+      this.setState({ 'projectCodeList': data.projectCodeList, 'updater': '' });
+    });
   }
   render() {
     const fields = [{
@@ -90,71 +80,27 @@ class AllStaffHistory extends React.Component {
       hidden: true,
       search: true
     }];
-    if (getUserKind() === 'P') {
-      return this.props.buildList({
-        fields,
-        searchParams: {
-          staffCode: this.staffCode
-        },
-        buttons: [{
-          code: 'detail',
-          name: '详情',
-          handler: (selectedRowKeys, selectedRows) => {
-            if (!selectedRowKeys.length) {
-              showWarnMsg('请选择记录');
-            } else if (selectedRowKeys.length > 1) {
-              showWarnMsg('请选择一条记录');
-            } else {
-              this.props.history.push(`/staff/allStaff/history-detail?v=1&code=${selectedRowKeys[0]}`);
-            }
+    return this.state.projectCodeList ? this.props.buildList({
+      fields,
+      searchParams: {
+        staffCode: this.staffCode,
+        projectCodeList: this.state.projectCodeList
+      },
+      buttons: [{
+        code: 'detail',
+        name: '详情',
+        handler: (selectedRowKeys, selectedRows) => {
+          if (!selectedRowKeys.length) {
+            showWarnMsg('请选择记录');
+          } else if (selectedRowKeys.length > 1) {
+            showWarnMsg('请选择一条记录');
+          } else {
+            this.props.history.push(`/staff/allStaff/history-detail?v=1&code=${selectedRowKeys[0]}`);
           }
-        }, {
-          code: 'goBack',
-          name: '返回',
-          handler: () => {
-            this.props.history.go(-1);
-          }
-        }],
-        pageCode: 631465
-      });
-    } else if (getUserKind() === 'S') {
-      return this.state.projectCodeList ? this.props.buildList({
-        fields,
-        searchParams: {
-          staffCode: this.staffCode,
-          projectCodeList: this.state.projectCodeList
-        },
-        buttons: [{
-          code: 'detail',
-          name: '详情',
-          handler: (selectedRowKeys, selectedRows) => {
-            if (!selectedRowKeys.length) {
-              showWarnMsg('请选择记录');
-            } else if (selectedRowKeys.length > 1) {
-              showWarnMsg('请选择一条记录');
-            } else {
-              this.props.history.push(`/staff/allStaff/history-detail?v=1&code=${selectedRowKeys[0]}`);
-            }
-          }
-        }, {
-          code: 'goBack',
-          name: '返回',
-          handler: () => {
-            this.props.history.go(-1);
-          }
-        }],
-        pageCode: 631465
-      }) : null;
-    } else {
-      return this.props.buildList({
-        fields,
-        searchParams: {
-          staffCode: this.staffCode
-        },
-        buttons: [],
-        pageCode: 631465
-      });
-    }
+        }
+      }],
+      pageCode: 631465
+    }) : null;
   }
 }
 

@@ -33,11 +33,9 @@ class AllStaffLeaveRecords extends React.Component {
     this.staffCode = getQueryString('staffCode', this.props.location.search);
   }
   componentDidMount() {
-    if (getUserKind() === 'S') {
-      getUserDetail(getUserId()).then((data) => {
-        this.setState({'projectCodeList': data.projectCodeList});
-      });
-    }
+    getUserDetail(getUserId()).then((data) => {
+      this.setState({'projectCodeList': data.projectCodeList});
+    });
   }
   render() {
     const fields = [{

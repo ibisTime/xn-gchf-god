@@ -27,11 +27,9 @@ class UserAddEdit extends React.Component {
     this.view = !!getQueryString('v', this.props.location.search);
   }
   componentDidMount() {
-    if(cookies.get('loginKind') === 'S') {
-      getUserDetail(getUserId()).then((res) => {
-        this.setState({ province: res.province, city: res.city, area: res.area });
-      });
-    }
+    getUserDetail(getUserId()).then((res) => {
+      this.setState({ province: res.province, city: res.city, area: res.area });
+    });
   }
   render() {
     const fields = [{
@@ -61,7 +59,7 @@ class UserAddEdit extends React.Component {
     }, {
       title: '用户类型',
       field: 'type',
-      value: cookies.get('loginKind') === 'S' ? 'S' : 'P',
+      value: 'S',
       hidden: true,
       required: true
     }, {
@@ -70,28 +68,17 @@ class UserAddEdit extends React.Component {
       mobile: true,
       required: true
     }];
-    if(cookies.get('loginKind') === 'S') {
-      return this.state.province ? this.props.buildDetail({
-        fields,
-        addCode: 631070,
-        beforeSubmit: (params) => {
-          params.province = this.state.province;
-          params.city = this.state.city;
-          params.area = this.state.area;
-          params.userRefree = getUserId();
-          return params;
-        }
-      }) : null;
-    }else {
-      return this.props.buildDetail({
-        fields,
-        addCode: 631070,
-        beforeSubmit: (params) => {
-          params.userRefree = getUserId();
-          return params;
-        }
-      });
-    }
+    return this.state.province ? this.props.buildDetail({
+      fields,
+      addCode: 631070,
+      beforeSubmit: (params) => {
+        params.province = this.state.province;
+        params.city = this.state.city;
+        params.area = this.state.area;
+        params.userRefree = getUserId();
+        return params;
+      }
+    }) : null;
   }
 }
 

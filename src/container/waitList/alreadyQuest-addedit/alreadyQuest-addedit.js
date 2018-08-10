@@ -42,11 +42,9 @@ class AlreadyQuestAddedit extends React.Component {
     };
   };
   componentDidMount() {
-    if(cookies.get('loginKind') === 'S') {
-      getUserDetail(getUserId()).then((res) => {
-        this.setState({ projectCodeList: res.projectCodeList });
-      });
-    }
+    getUserDetail(getUserId()).then((res) => {
+      this.setState({ projectCodeList: res.projectCodeList });
+    });
     detailDate(this.code).then((data) => {
       console.log(data);
       this.setState({
@@ -59,7 +57,7 @@ class AlreadyQuestAddedit extends React.Component {
         download: data.download,
         backDownload: data.backDownload,
         title: data.title,
-        accountName: data.companyCard.accountName
+        accountName: data.projectCard.accountName
       });
     });
   }

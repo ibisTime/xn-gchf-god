@@ -101,7 +101,6 @@ class Jindu extends React.Component {
       <div>
         <div style={{ display: 'inline-block' }}>
           <h2>{proTitle || '所有项目的进度'}</h2>
-          <Button type='primary' onClick={this.addjindu.bind(this)}>新增进度</Button>
         </div>
         <Divider />
         <div style={{ float: 'right', width: 100, maxHeight: 900, marginRight: 132 }}>

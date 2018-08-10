@@ -36,11 +36,9 @@ class User extends React.Component {
     };
   }
   componentDidMount() {
-    if(cookies.get('loginKind') === 'S') {
-      getUserDetail(getUserId()).then((res) => {
-        this.setState({ province: res.province, city: res.city, area: res.area });
-      });
-    }
+    getUserDetail(getUserId()).then((res) => {
+      this.setState({ province: res.province, city: res.city, area: res.area });
+    });
   }
   render() {
     const fields = [{
@@ -76,7 +74,7 @@ class User extends React.Component {
         } else if (selectedRowKeys.length > 1) {
           showWarnMsg('请选择一条记录');
         } else {
-          this.props.history.push(`/security/user/resetPwd?userId=${selectedRowKeys[0]}&loginName=${selectedRows[0].loginName}`);
+          this.props.history.push(`/system/user/resetPwd?userId=${selectedRowKeys[0]}&loginName=${selectedRows[0].loginName}`);
         }
       },
       rock: (selectedRowKeys, selectedRows) => {
@@ -106,44 +104,35 @@ class User extends React.Component {
           showWarnMsg('请选择一条记录');
         } else {
           if(selectedRows[0].roleCode.slice(0, 2) !== 'RO') {
-            this.props.history.push(`/security/user/setRole?userId=${selectedRowKeys[0]}&loginName=${selectedRows[0].loginName}`);
+            this.props.history.push(`/system/user/setRole?userId=${selectedRowKeys[0]}&loginName=${selectedRows[0].loginName}`);
           } else {
             showWarnMsg('该用户为管理员，无法设置角色');
           }
         }
       },
+      // 修改手机号
       changeMobile: (selectedRowKeys, selectedRows) => {
         if (!selectedRowKeys.length) {
           showWarnMsg('请选择记录');
         } else if (selectedRowKeys.length > 1) {
           showWarnMsg('请选择一条记录');
         } else {
-          this.props.history.push(`/security/user/changeMobile?userId=${selectedRowKeys[0]}&loginName=${selectedRows[0].loginName}`);
+          this.props.history.push(`/system/user/changeMobile?userId=${selectedRowKeys[0]}&loginName=${selectedRows[0].loginName}`);
         }
       }
     };
-    if(cookies.get('loginKind') === 'P') {
-      return this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: { type: 'P', updater: '' },
-        pageCode: 631085,
-        rowKey: 'userId'
-      });
-    }else {
-      return this.state.province ? this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: {
-          province: this.state.province,
-          city: this.state.city,
-          area: this.state.area,
-          updater: ''
-        },
-        pageCode: 631085,
-        rowKey: 'userId'
-      }) : null;
-    }
+    return this.state.province ? this.props.buildList({
+      fields,
+      btnEvent,
+      searchParams: {
+        province: this.state.province,
+        city: this.state.city,
+        area: this.state.area,
+        updater: ''
+      },
+      pageCode: 631085,
+      rowKey: 'userId'
+    }) : null;
   }
 }
 

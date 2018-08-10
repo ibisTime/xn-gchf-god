@@ -18,11 +18,6 @@ class Login extends React.Component {
     // this.state = {
     //   storePwd: true
     // };
-    // alert(window.location.origin === 'https://devoss.aijmu.com');
-    // this.typeName = window.location.origin === 'https://devoss.aijmu.com' ? '平台端'
-    //     : this.typeName = window.location.origin === 'http://120.26.6.213:2505' ? '监管端' : '平台端';
-    // this.typeName = window.location.origin === 'https://tstoss.aijmu.com' ? '平台端'
-    //     : this.typeName = window.location.origin === 'http://47.96.161.183:2505' ? '监管端' : '平台端';
     this.typeName = '监管端';
     // this.typeName = window.location.origin === 'http://120.26.6.213:2505' ? '监管端' : '平台端';
     // this.typeName = '平台端';
@@ -41,11 +36,6 @@ class Login extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        // this.type = 'P';
-        // this.type = window.location.origin === 'https://devoss.aijmu.com' ? 'P'
-        //     : this.type = window.location.origin === 'http://120.26.6.213:2505' ? 'S' : 'P';
-        // this.type = window.location.origin === 'https://tstoss.aijmu.com' ? 'P'
-        //     : this.type = window.location.origin === 'http://47.96.161.183:2505' ? 'S' : 'P';
         this.type = 'S';
         this.setState({ loading: true });
         // values.type = 'P'; // 平台用户
@@ -57,7 +47,7 @@ class Login extends React.Component {
         this.props.login(values);
       }
     });
-  }
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
     return (

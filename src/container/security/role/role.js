@@ -39,16 +39,12 @@ class Role extends React.Component {
     super(props);
     this.handleExport = this.handleExport.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.type = getUserKind();
     this.state = {
       data: [],
-      cols: [],
-      userKind: ''
+      cols: []
     };
   }
   componentDidMount() {
-    let userKind = getUserKind();
-    this.setState({ userKind });
   }
   handleExport() {
     const ws = XLSX.utils.aoa_to_sheet(this.state.data);

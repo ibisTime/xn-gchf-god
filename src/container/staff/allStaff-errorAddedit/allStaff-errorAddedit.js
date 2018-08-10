@@ -1,6 +1,5 @@
 import React from 'react';
-import { Timeline, Button, Card, Input, Divider, Table, Icon, Spin, Form, Checkbox } from 'antd';
-import fetch from 'common/js/fetch';
+import { Button, Input, Divider, Spin, Form } from 'antd';
 import { getQueryString, showSucMsg, formatDate, getUserKind } from 'common/js/util';
 import { DetailWrapper } from 'common/js/build-detail';
 import { getBankNameByCode } from 'api/project';
@@ -8,7 +7,7 @@ import { getUserId, getUserDetail, getUserErrorInfo, getUserWagesInfo, senderrIn
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
-
+// 事件处理-异常查看-详情
 class AllStaffAddEdit extends React.Component {
   constructor(props) {
     super(props);

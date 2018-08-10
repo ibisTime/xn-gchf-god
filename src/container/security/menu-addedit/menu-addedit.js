@@ -18,14 +18,11 @@ class MenuAddEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userKind: ''
     };
     this.code = getQueryString('code', this.props.location.search);
     this.view = !!getQueryString('v', this.props.location.search);
   }
   componentDidMount() {
-    let userKind = getUserKind();
-    this.setState({ userKind });
   }
   render() {
     const fields = [{
@@ -36,7 +33,7 @@ class MenuAddEdit extends React.Component {
       listCode: '631066',
       params: {
         type: 1,
-        systemCode: this.state.userKind
+        systemCode: 'S'
       },
       keyName: 'code',
       valueName: '{{code.DATA}} {{name.DATA}}'
@@ -75,7 +72,7 @@ class MenuAddEdit extends React.Component {
       field: 'remark',
       maxlength: 250
     }];
-    return this.state.userKind ? this.props.buildDetail({
+    return this.props.buildDetail({
       fields,
       code: this.code,
       view: this.view,
@@ -83,10 +80,10 @@ class MenuAddEdit extends React.Component {
       addCode: 631060,
       editCode: 631062,
       beforeSubmit: (params) => {
-        params.systemCode = this.state.userKind;
+        params.systemCode = 'S';
         return params;
       }
-    }) : null;
+    });
   }
 }
 

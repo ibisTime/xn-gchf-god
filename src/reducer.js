@@ -12,7 +12,6 @@ import { securityUser } from './redux/security/user';
 import { securityUserAddEdit } from './redux/security/user-addedit';
 import { securityUserResetPwd } from './redux/security/user-resetPwd';
 import { securityUserSetRole } from './redux/security/user-setRole';
-import { securityUserSetBumen } from './redux/security/user-setBumen';
 import { securityUserChangeMobile } from './redux/security/user-changeMobile';
 import { securitySysParam } from './redux/security/sysParam';
 import { securitySysparamAddEdit } from './redux/security/sysParam-addedit';
@@ -28,9 +27,6 @@ import { waitListAlreadyQuest } from './redux/waitList/alreadyQuest';
 import { waitListAlreadyQuestAddedit } from './redux/waitList/alreadyQuest-addedit';
 import { generalTextParam } from './redux/general/text-param';
 import { generalTextParamAddEdit } from './redux/general/text-param-addedit';
-import { newProjBumenConstruct } from './redux/newProj/bumenConstruct';
-import { newIdAddProject } from './redux/newId/addProject';
-import { newProjAddBumen } from './redux/newProj/addBumen';
 import { newProjProject } from './redux/newProj/project';
 import { newProjKaoqin } from './redux/newProj/kaoqin';
 import { newprojProjectAddEdit } from './redux/newProj/project-addedit';
@@ -47,7 +43,6 @@ import { newProjProjectSalaryCheck } from './redux/newProj/project-salary-check'
 import { newProjProjectKaoqin } from './redux/newProj/project-kaoqin';
 import { newProjProjectWeekday } from './redux/newProj/project-weekday';
 import { newProjProjectQuit } from './redux/newProj/project-quit';
-import { newProjProjectAddBumen } from './redux/newProj/project-addBumen';
 import { yewuManageAccount } from './redux/yewuManage/account';
 import { yewuManageAccountAddEdit } from './redux/yewuManage/account-addedit';
 import { hetongChengbaoshang } from './redux/hetong/chengbaoshang';
@@ -65,18 +60,13 @@ import { peopleHistory } from './redux/people/history';
 import { staffAllStaff } from './redux/staff/allStaff';
 import { staffAllStaffAddEdit } from './redux/staff/allStaff-addedit';
 import { staffAllStaffLeaveRecords } from './redux/staff/allStaff-leaveRecords';
-import { staffAllStaffSkill } from './redux/staff/allStaff-skill';
-import { staffSkillAddEdit } from './redux/staff/skill-addedit';
 import { staffAllStaffError } from './redux/staff/allStaff-error';
 import { staffAllStaffErrHistory } from './redux/staff/allStaff-errHistory';
 import { staffAllStaffErrorEdit } from './redux/staff/allStaff-errorEdit';
 import { staffAllStaffHistory } from './redux/staff/allStaff-history';
 import { staffAllStaffDetail } from './redux/staff/allStaff-detail';
 import { staffLeaveRecordsDetail } from './redux/staff/leaveRecords-detail';
-import { staffAllStaffNotice } from './redux/staff/allStaff-notice';
-import { StaffAllStaffNoticeAddEdit } from './redux/staff/allStaff-noticeAddedit';
 import { staffAllStaffErrorAddEdit } from './redux/staff/allStaff-errorAddedit';
-import { staffAllStaffWages } from './redux/staff/allStaff-wages';
 import { staffBankCard } from './redux/staff/bankCard';
 import { staffBankCardAddEdit } from './redux/staff/bankCard-addedit';
 import { staffHistoryDetail } from './redux/staff/history-detail';
@@ -85,15 +75,6 @@ import { daifaDaifa } from './redux/daifa/daifa';
 import { mapMap } from './redux/map/map';
 import { daifaDaifaAddEdit } from './redux/daifa/daifa-addedit';
 import { daifaDaifaEdit } from './redux/daifa/daifa-edit';
-import { newIdBank } from './redux/newId/bank';
-import { newIdOperation } from './redux/newId/operation';
-import { newIdOperationAddEdit } from './redux/newId/operation-addedit';
-import { newIdBankAddEdit } from './redux/newId/bank-addedit';
-import { newIdYezhu } from './redux/newId/yezhu';
-import { newIdYezhuAddEdit } from './redux/newId/yezhu-addedit';
-import { newIdSupervise } from './redux/newId/supervise';
-import { newIdSuperviseAddEdit } from './redux/newId/supervise-addedit';
-import { newIdNewProject } from './redux/newId/newProject';
 import { projectStaff } from './redux/projectStaff/projectStaff';
 import { projectStaffAddEdit } from './redux/projectStaff/projectStaff-addedit';
 import { projectStaffAddBankCard } from './redux/projectStaff/projectStaff-addBankCard';
@@ -113,7 +94,6 @@ export default combineReducers({
   securityUser,
   securityUserAddEdit,
   securityUserSetRole,
-  securityUserSetBumen,
   securityUserResetPwd,
   securityUserChangeMobile,
   securitySysParam,
@@ -131,9 +111,6 @@ export default combineReducers({
   waitListAlreadyQuestAddedit,
   generalTextParam,
   generalTextParamAddEdit,
-  newProjBumenConstruct,
-  newIdAddProject,
-  newProjAddBumen,
   newProjProject,
   newprojProjectAddEdit,
   newProjProjectDetail,
@@ -150,7 +127,6 @@ export default combineReducers({
   newProjProjectSalaryCheck,
   newProjKaoqin,
   newProjProjectKaoqin,
-  newProjProjectAddBumen,
   yewuManageAccount,
   yewuManageAccountAddEdit,
   hetongChengbaoshang,
@@ -168,34 +144,20 @@ export default combineReducers({
   staffAllStaff,
   staffAllStaffAddEdit,
   staffAllStaffLeaveRecords,
-  staffAllStaffSkill,
-  staffSkillAddEdit,
   staffAllStaffError,
   staffAllStaffErrHistory,
   staffAllStaffErrorEdit,
   staffAllStaffHistory,
   staffAllStaffDetail,
   staffLeaveRecordsDetail,
-  staffAllStaffNotice,
-  StaffAllStaffNoticeAddEdit,
   staffBankCard,
   staffBankCardAddEdit,
-  staffAllStaffWages,
   staffAllStaffErrorAddEdit,
   staffHistoryDetail,
   staffAllStaffAddBankCard,
   daifaDaifa,
   daifaDaifaAddEdit,
   daifaDaifaEdit,
-  newIdBank,
-  newIdOperation,
-  newIdOperationAddEdit,
-  newIdBankAddEdit,
-  newIdYezhu,
-  newIdYezhuAddEdit,
-  newIdSupervise,
-  newIdSuperviseAddEdit,
-  newIdNewProject,
   projectStaff,
   projectStaffAddEdit,
   projectStaffAddBankCard,

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, Button } from 'antd';
-import listWrapper from 'common/js/build-list';
 import {
   getUserId,
   getUserKind,

@@ -32,13 +32,9 @@ class ProjectStaff extends React.Component {
     };
   }
   componentDidMount() {
-    let userKind = getUserKind();
-    this.setState({ userKind });
-    if (getUserKind() === 'S') {
-      getUserDetail(getUserId()).then((data) => {
-        this.setState({ 'projectCodeList': data.projectCodeList });
-      });
-    }
+    getUserDetail(getUserId()).then((data) => {
+      this.setState({ 'projectCodeList': data.projectCodeList });
+    });
   }
   render() {
     const fields = [{
@@ -83,33 +79,6 @@ class ProjectStaff extends React.Component {
       search: true
     }];
     const btnEvent = {
-      weekday: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/staff/allStaff/weekday?code=${selectedRows[0].staffCode}&projectCode=${selectedRows[0].projectCode}`);
-        }
-      },
-      leaveRecords: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/staff/allStaff/leaveRecords?staffCode=${selectedRows[0].staffCode}`);
-        }
-      },
-      quit: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/staff/allStaff/quit?code=${selectedRows[0].staffCode}&projectCode=${selectedRows[0].projectCode}`);
-        }
-      },
       detail: (selectedRowKeys, selectedRows) => {
         if (!selectedRowKeys.length) {
           showWarnMsg('请选择记录');
@@ -118,61 +87,17 @@ class ProjectStaff extends React.Component {
         } else {
           this.props.history.push(`/projectStaff/projectStaff/addedit?v=1&code=${selectedRowKeys[0]}`);
         }
-      },
-      addBankCard: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          if(selectedRows[0].staff.bankCard) {
-            this.props.history.push(`/projectStaff/projectStaff/addBankCard?staffCode=${selectedRows[0].staffCode}&code=${selectedRows[0].staff.bankCard.code || ''}&name=${selectedRows[0].staff.name}&projectCode=${selectedRows[0].projectCode}`);
-          } else {
-            this.props.history.push(`/projectStaff/projectStaff/addBankCard?staffCode=${selectedRows[0].staffCode}&name=${selectedRows[0].staff.name}&projectCode=${selectedRows[0].projectCode}`);
-          }
-        }
-      },
-      skill: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/staff/allStaff/skill?staffCode=${selectedRows[0].staffCode}`);
-        }
-      },
-      reruzhi: (selectedRowKeys, selectedRows) => {
-        if (!selectedRowKeys.length) {
-          showWarnMsg('请选择记录');
-        } else if (selectedRowKeys.length > 1) {
-          showWarnMsg('请选择一条记录');
-        } else {
-          this.props.history.push(`/staff/ruzhiInfo?code=${selectedRows[0].code}&reruzhi=1&staffCode=${selectedRows[0].staffCode}`);
-        }
       }
     };
-    if (getUserKind() === 'O') {
-      return this.state.companyCode && this.state.userKind ? this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: {
-          updater: '',
-          kind: 'O',
-          companyCode: this.state.companyCode
-        },
-        pageCode: 631465
-      }) : null;
-    } else {
-      return this.state.userKind && this.state.projectCodeList ? this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: {
-          updater: '',
-          projectCodeList: this.state.projectCodeList
-        },
-        pageCode: 631465
-      }) : null;
-    }
+    return this.state.projectCodeList ? this.props.buildList({
+      fields,
+      btnEvent,
+      searchParams: {
+        updater: '',
+        projectCodeList: this.state.projectCodeList
+      },
+      pageCode: 631465
+    }) : null;
   }
 }
 
