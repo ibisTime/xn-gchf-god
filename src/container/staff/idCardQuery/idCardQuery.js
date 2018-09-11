@@ -18,11 +18,9 @@ class AllStaffAddEdit extends React.Component {
     };
   }
   componentDidMount() {
-    if (getUserKind() === 'S' || getUserKind() === 'O') {
-      getUserDetail(getUserId()).then((data) => {
-        this.setState({ 'projectCodeList': data.projectCodeList, 'companyCode': data.companyCode });
-      });
-    }
+    getUserDetail(getUserId()).then((data) => {
+      this.setState({ 'projectCodeList': data.projectCodeList, 'companyCode': data.companyCode });
+    });
     getDict('salary_status').then((res) => {
       res.map((item) => {
         this.state.salaryStatus[item.dkey] = item.dvalue;

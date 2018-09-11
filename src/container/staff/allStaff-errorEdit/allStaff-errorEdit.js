@@ -41,7 +41,7 @@ class AllStaffErrorEdit extends React.Component {
       editCode: 631451,
       onOk: () => {
         showSucMsg('操作成功');
-        this.props.history.push(`/staff/allStafferror}`);
+        this.props.history.push(`/handleError`);
       }
     });
   }

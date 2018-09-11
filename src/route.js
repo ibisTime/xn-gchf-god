@@ -261,8 +261,12 @@ const ROUTES = [
     path: '/staff/idCardQuery',
     component: asyncComponent(() => import('container/staff/idCardQuery/idCardQuery'))
   },
+  // {
+  //   path: '/staff/allStafferror',
+  //   component: asyncComponent(() => import('container/staff/allStaff-error/allStaff-error'))
+  // },
   {
-    path: '/staff/allStafferror',
+    path: '/handleError',
     component: asyncComponent(() => import('container/staff/allStaff-error/allStaff-error'))
   },
   {
