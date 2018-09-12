@@ -130,3 +130,26 @@ export function getStaffDetail(code) {
     idNo: code
   });
 }
+// 分页查用工合同
+export function getEmployContract(info) {
+  return fetch(631405, {
+    start: 1,
+    limit: 10,
+    employCode: info.code || '',
+    kind: 'O'
+  });
+}
+// 列表查用工合同
+export function getEmployContractList(info) {
+  return fetch(631406, {
+    projectCode: info.projectCode || '',
+    employCode: info.code || '',
+    kind: 'O'
+  });
+}
+// 详情查雇佣
+export function getEmploy(code) {
+  return fetch(631467, {
+    code
+  });
+}

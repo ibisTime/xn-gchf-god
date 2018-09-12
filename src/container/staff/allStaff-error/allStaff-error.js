@@ -100,7 +100,7 @@ class AllStaffError extends React.Component {
       },
       buttons: [{
         code: 'detail',
-        name: '详情'
+        name: '处理'
       }],
       pageCode: 631445
     }) : null;

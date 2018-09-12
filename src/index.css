@@ -53,6 +53,7 @@ html {
 
 .table-wrapper .ant-table-bordered .ant-table-thead > tr > th {
   white-space: nowrap;
+  color: #666;
 }
 
 .ant-select-dropdown-menu-item {
@@ -284,4 +285,14 @@ html {
 }
 .ant-table-bordered.ant-table-empty .ant-table-placeholder {
     z-index: 0;
+}
+.ant-btn {
+    fontSize: 14px;
+    padding: 0 35px;
+}
+.ant-menu-dark.ant-menu-horizontal > .ant-menu-item, .ant-menu-dark.ant-menu-horizontal > .ant-menu-submenu {
+    color: #fff;
+}
+.ant-menu-dark .ant-menu-item, .ant-menu-dark .ant-menu-item-group-title, .ant-menu-dark .ant-menu-item > a {
+    color: #fff;
 }

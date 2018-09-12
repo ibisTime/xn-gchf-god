@@ -50,17 +50,14 @@ class Daifa extends React.Component {
       field: 'projectName',
       title: '工程名称'
     }, {
-      field: 'bankNames',
-      title: '开户行',
-      formatter: (v, d) => {
-        return d.bankName + d.subbranch;
-      }
+      field: 'month',
+      title: '月份'
     }, {
-      field: 'bankcardNumber',
-      title: '账户'
+      field: 'number',
+      title: '工资条人数（人）'
     }, {
       field: 'totalAmounts',
-      title: '本月累计发薪',
+      title: '共计金额（元)',
       formatter: (v, d) => {
         return moneyFormat(d.totalAmount);
       }
@@ -71,7 +68,7 @@ class Daifa extends React.Component {
       key: 'message_status'
     }, {
       field: 'createDatetime',
-      title: '创建时间',
+      title: '生成时间',
       type: 'datetime'
     }];
     return this.state.projectCodeList ? (

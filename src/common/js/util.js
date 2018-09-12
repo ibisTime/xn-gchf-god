@@ -121,6 +121,15 @@ function padLeftZero(str) {
 export function dateFormat(date) {
   return formatDate(date, 'yyyy-MM-dd');
 }
+/**
+ * 月份格式转化 yyyy-MM-dd
+ * @param date
+ * @param format
+ */
+export function monthFormat(date) {
+  console.log(date);
+  return formatDate(date, 'YYYY-MM');
+}
 
 /**
  * 日期格式转化 yyyy-MM-dd hh:mm:ss

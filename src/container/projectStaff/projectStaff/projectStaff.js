@@ -37,12 +37,26 @@ class ProjectStaff extends React.Component {
     });
   }
   render() {
+    const featStatusData = [{
+      dkey: '0',
+      dvalue: '无效'
+    }, {
+      dkey: '1',
+      dvalue: '有效'
+    }];
+    const pict1StatusData = [{
+      dkey: '0',
+      dvalue: '未拍摄'
+    }, {
+      dkey: '1',
+      dvalue: '已拍摄'
+    }];
     const fields = [{
       field: 'staffName',
       title: '姓名'
     }, {
       field: 'idNo',
-      title: '证件号',
+      title: '身份证号码',
       formatter: (v, d) => {
         return d.staff.idNo;
       }
@@ -64,17 +78,51 @@ class ProjectStaff extends React.Component {
       type: 'select',
       key: 'position_type'
     }, {
-      field: 'status',
-      title: '状态',
-      key: 'staff_status',
-      type: 'select'
+      field: 'pict1Status',
+      title: '图片信息',
+      data: pict1StatusData,
+      keyName: 'dkey',
+      valueName: 'dvalue'
     }, {
-      field: 'remark',
-      title: '备注'
+      field: 'featStatus',
+      title: '特征值状态',
+      data: featStatusData,
+      keyName: 'dkey',
+      valueName: 'dvalue'
     }, {
       field: 'keyword',
       title: '关键字查询',
-      placeholder: '名字/手机号',
+      placeholder: '姓名/手机号',
+      hidden: true,
+      search: true
+    }, {
+      field: 'projectCode',
+      placeholder: '所在工程',
+      listCode: '631357',
+      params: {
+        projectCodeList: this.state.projectCodeList
+      },
+      keyName: 'code',
+      valueName: 'name',
+      type: 'select',
+      hidden: true,
+      search: true
+    }, {
+      field: 'pict1Status',
+      placeholder: '图片信息',
+      data: pict1StatusData,
+      type: 'select',
+      keyName: 'dkey',
+      valueName: 'dvalue',
+      hidden: true,
+      search: true
+    }, {
+      field: 'featStatus',
+      placeholder: '特征值状态',
+      data: featStatusData,
+      type: 'select',
+      keyName: 'dkey',
+      valueName: 'dvalue',
       hidden: true,
       search: true
     }];
@@ -85,7 +133,7 @@ class ProjectStaff extends React.Component {
         } else if (selectedRowKeys.length > 1) {
           showWarnMsg('请选择一条记录');
         } else {
-          this.props.history.push(`/projectStaff/projectStaff/addedit?v=1&code=${selectedRowKeys[0]}`);
+          this.props.history.push(`/projectStaff/projectStaff/addedit?staffCode=${selectedRows[0].staffCode}&code=${selectedRowKeys[0]}&projectCode=${selectedRows[0].projectCode}`);
         }
       }
     };

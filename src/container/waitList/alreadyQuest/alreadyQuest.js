@@ -49,30 +49,24 @@ class AlreadyQuest extends React.Component {
       title: '项目名称',
       field: 'projectName'
     }, {
-      title: '标题',
-      field: 'title'
+      field: 'month',
+      title: '月份'
     }, {
-      field: 'bankNames',
-      title: '开户行',
-      formatter: (v, d) => {
-        return d.bankName + d.subbranch;
-      }
-    }, {
-      field: 'bankcardNumber',
-      title: '账户'
+      field: 'number',
+      title: '工资条人数（人）'
     }, {
       field: 'totalAmounts',
-      title: '本月累计发薪',
+      title: '共计金额（元)',
       formatter: (v, d) => {
         return moneyFormat(d.totalAmount);
       }
     }, {
-      title: '状态',
       field: 'status',
-      key: 'message_status',
-      type: 'select'
+      title: '状态',
+      type: 'select',
+      key: 'message_status'
     }, {
-      title: '请求时间',
+      title: '发送时间',
       field: 'sendDatetime',
       type: 'datetime'
     }, {

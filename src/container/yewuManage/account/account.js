@@ -83,6 +83,7 @@ class Account extends React.Component {
     }];
     return this.state.projectCodeList ? this.props.buildList({
       fields,
+      rowKey: 'projectCode',
       pageCode: 631365,
       searchParams: {
         projectCodeList: this.state.projectCodeList

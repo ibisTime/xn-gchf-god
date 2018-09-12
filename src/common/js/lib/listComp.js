@@ -1,9 +1,9 @@
 import React from 'react';
 import cookies from 'browser-cookies';
-import { Form, Select, DatePicker, Input, Button, Table } from 'antd';
+import { Form, Select, DatePicker, Input, Button, Table, Divider } from 'antd';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
-import { moneyFormat, dateTimeFormat, dateFormat, tempString,
+import { moneyFormat, dateTimeFormat, dateFormat, monthFormat, tempString,
   showWarnMsg, showSucMsg, showDelConfirm, getUserKind } from 'common/js/util';
 import { getOwnerBtns } from 'api/menu';
 import { getDictList } from 'api/dict';
@@ -15,9 +15,10 @@ import cityData from 'common/js/lib/city';
 moment.locale('zh-cn');
 const FormItem = Form.Item;
 const Option = Select.Option;
-const { RangePicker } = DatePicker;
 const DATE_FORMAT = 'YYYY-MM-DD';
+const MONTH_FORMAT = 'YYYY-MM';
 const DATETIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+const { RangePicker, MonthPicker } = DatePicker;
 
 export default class ListComponent extends React.Component {
   constructor(props, context) {
@@ -74,6 +75,15 @@ export default class ListComponent extends React.Component {
             return f.nowrap ? <span style={{whiteSpace: 'nowrap'}}>{dateFormat(v)}</span> : dateFormat(v);
           };
           this.addRender(f, dateFormat);
+        }
+      } else if (f.type === 'month') {
+        if (f.render) {
+          obj.render = f.render;
+        } else {
+          obj.render = (v) => {
+            return f.nowrap ? <span style={{whiteSpace: 'nowrap'}}>{monthFormat(v)}</span> : monthFormat(v);
+          };
+          this.addRender(f, monthFormat);
         }
       } else if (f.type === 'select' || f.type === 'provSelect') {
         if (f.key) {
@@ -206,6 +216,18 @@ export default class ListComponent extends React.Component {
     this.options.fields.forEach(v => {
       if (v.type === 'date' || v.type === 'datetime') {
         let format = v.type === 'date' ? DATE_FORMAT : DATETIME_FORMAT;
+        if (v.rangedate) {
+          let bDate = params[v.field] ? [...params[v.field]] : [];
+          if (bDate.length) {
+            v.rangedate.forEach((d, index) => {
+              result[d] = bDate[index].format(format);
+            });
+          }
+        } else {
+          result[v.field] = params[v.field] ? params[v.field].format(format) : params[v.field];
+        }
+      } else if (v.type === 'month') {
+        let format = MONTH_FORMAT;
         if (v.rangedate) {
           let bDate = params[v.field] ? [...params[v.field]] : [];
           if (bDate.length) {
@@ -377,6 +399,8 @@ export default class ListComponent extends React.Component {
             }}>{v.name}</Button>
           ))}
         </div>
+        <Divider />
+        <div className="head">{this.options.head}</div>
         <div className="table-wrapper">
           <Table
             bordered
@@ -421,6 +445,8 @@ export default class ListComponent extends React.Component {
         return item.pageCode ? this.getSearchSelectItem(item) : this.getSelectItem(item);
       case 'date':
         return item.rangedate ? this.getRangeDateItem(item) : this.getDateItem(item);
+      case 'month':
+        return item.rangedate ? this.getRangeDateItem(item) : this.getDateItem(item, false, true);
       case 'datetime':
         return item.rangedate ? this.getRangeDateItem(item, true) : this.getDateItem(item, true);
       default:
@@ -434,7 +460,7 @@ export default class ListComponent extends React.Component {
             optionFilterProp="children"
             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             style={{ width: 200 }}
-            placeholder="请选择">
+            placeholder={item.placeholder}>
             {item.data ? item.data.map(d => (
               <Option key={d[item.keyName]} value={d[item.keyName]}>
                 {d[item.valueName] ? d[item.valueName] : tempString(item.valueName, d)}
@@ -450,7 +476,7 @@ export default class ListComponent extends React.Component {
             onSearch={v => this.searchSelectChange(v, item)}
             optionLabelProp="children"
             style={{ width: 200 }}
-            placeholder="请输入关键字搜索">
+            placeholder={item.placeholder}>
             {item.data ? item.data.map(d => (
               <Option key={d[item.keyName]} value={d[item.keyName]}>
                 {d[item.valueName] ? d[item.valueName] : tempString(item.valueName, d)}
@@ -458,19 +484,30 @@ export default class ListComponent extends React.Component {
             )) : null}
           </Select>;
   }
-  getDateItem(item, isTime = false) {
+  getDateItem(item, isTime = false, isMonth = false) {
     let format = DATE_FORMAT;
     let places = '选择日期';
     if (isTime) {
       format = DATETIME_FORMAT;
       places = '选择时间';
     }
-    return <DatePicker
-            allowClear={false}
-            locale={locale}
-            placeholder={places}
-            format={format}
-            showTime={isTime} />;
+    if(isMonth) {
+      format = MONTH_FORMAT;
+      places = '选择月份';
+      return <MonthPicker
+          allowClear={false}
+          locale={locale}
+          placeholder={places}
+          format={format}
+          showTime={false} />;
+    } else {
+      return <DatePicker
+          allowClear={false}
+          locale={locale}
+          placeholder={places}
+          format={format}
+          showTime={isTime} />;
+    }
   }
   getRangeDateItem(item, isTime = false) {
     let format = DATE_FORMAT;

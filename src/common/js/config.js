@@ -12,6 +12,27 @@ export const SYS_USER_TG = 'SYS_USER_ZXZX_TG';
 // 系统根菜单编号
 export const ROOT_MENU_CODE = 'GCHFPSM201800000000000000';
 export const ROOT_S_MENU_CODE = 'GCHFSSM201800000000000000';
+export const monthData = () => {
+  let arr = [];
+  for(let i = 1; i <= 12; i++) {
+    arr.push({
+      dkey: i,
+      dvalue: i
+    });
+  }
+  return arr;
+};
+export const dayData = () => {
+  let arr = [];
+  for(let i = 1; i <= 31; i++) {
+    arr.push({
+      dkey: i,
+      dvalue: i
+    });
+  }
+  console.log(arr);
+  return arr;
+};
 
 export const formItemLayout = {
   labelCol: {
