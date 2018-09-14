@@ -10,6 +10,7 @@ import {
   setSearchData
 } from '@redux/security/menu';
 import { listWrapper } from 'common/js/build-list';
+import { getUserKind, getRoleCode } from 'common/js/util';
 
 @listWrapper(
   state => ({
@@ -20,12 +21,6 @@ import { listWrapper } from 'common/js/build-list';
     cancelFetching, setPagination, setSearchParam, setSearchData }
 )
 class Menu extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  componentDidMount() {
-  }
   render() {
     const fields = [{
       title: '菜单名称',
@@ -39,7 +34,7 @@ class Menu extends React.Component {
       field: 'parentCode',
       type: 'select',
       listCode: '631066',
-      params: { type: '1', roleCode: sessionStorage.getItem('roleCode'), systemCode: this.state.userKind },
+      params: { type: '1', roleCode: getRoleCode(), systemCode: 'S' },
       keyName: 'code',
       valueName: '{{code.DATA}} {{name.DATA}}',
       search: true

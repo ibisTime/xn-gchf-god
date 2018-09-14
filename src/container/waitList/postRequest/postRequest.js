@@ -51,7 +51,7 @@ class PostRequest extends React.Component {
                 </div>
                 <div style={{ width: '100%', marginBottom: '20px' }}>
                   <i style={{ display: 'inline-block', whiteSpace: 'nowrap', fontStyle: 'normal' }}>{ v.title }</i>
-                  <Button type="primary" style={{ float: 'right', borderRadius: '15px', width: '82px', height: '31px' }} onClick={ () => { this.lookDetail(v.code); } }>查看</Button>
+                  <Button type="primary" style={{ float: 'right', borderRadius: '15px', width: '82px', height: '31px', padding: 0 }} onClick={ () => { this.lookDetail(v.code); } }>查看</Button>
                 </div>
                 <p style={{ display: 'inline-block', color: 'red' }}>{ statusDict[v.status] || '' }</p>
             </Card>)

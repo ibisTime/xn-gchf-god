@@ -25,7 +25,6 @@ class PostRequestAddedit extends React.Component {
     this.fankui = getQueryString('status', this.props.location.search) === '2';
     this.handleExport = this.handleExport.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.postRequest1 = this.postRequest1.bind(this);
     this.state = {
       data: [],
       cols: [],
@@ -59,24 +58,17 @@ class PostRequestAddedit extends React.Component {
       });
     });
   }
-  downNum(flag) {
-    let { backDownload, download } = this.state;
-    if (flag) {
-      backDownload += 1;
-    } else {
-      download += 1;
-    }
-    downNum(this.code, download, backDownload).then((data) => {
+  downNum = () => {
+    let download = this.state.download;
+    downNum(this.code, this.state.backDownload, download + 1).then((data) => {
       this.setState({
-        download: data.download,
-        backDownload: data.backDownload
+        download: data.download
       });
     });
-  }
+  };
   handleExport() {
-    this.downNum(true);
+    this.downNum();
     downLoad(this.code, this.state.projectCodeList).then((data) => {
-      console.log(data);
       if (!data || !data.length) {
         showWarnMsg('没有工资条信息！');
         return;
@@ -143,35 +135,6 @@ class PostRequestAddedit extends React.Component {
       showWarnMsg('请上传正确的文件！');
     }
   }
-  postRequest1() {
-    let param = {};
-    let payList = [];
-    this.state.data.forEach((d, i) => {
-      if (i > 4 && d.length) {
-        payList.push({
-          bankcardNumber: d[4],
-          latePayDatetime: formatDate(d[7]),
-          payAmount: d[6] * 1000,
-          code: d[1]
-        });
-      }
-    });
-    if (!payList || !payList.length) {
-      showWarnMsg('请上传工资信息！');
-      return;
-    };
-    console.log(payList);
-    param.payList = payList;
-    param.handler = getUserId();
-    param.code = this.code;
-    console.log(param);
-    fetch(631432, param).then(() => {
-      showSucMsg('操作成功');
-      setTimeout(() => {
-        this.props.history.go(-1);
-      }, 1000);
-    }).catch();
-  }
   render() {
     const props = {
       fileList: this.state.fileList,
@@ -197,7 +160,7 @@ class PostRequestAddedit extends React.Component {
            <img src={require('./gongzidan.png')} ></img>
           </div>
           <Button onClick={this.handleExport} type="primary" style={{ marginBottom: '12px', position: 'relative', top: '-20px', left: '0px' }}>点击下载</Button>
-          <span style={{ position: 'relative', left: '-70px', top: '20px', fontSize: '12px', color: '#999' }}>下载次数{this.state.backDownload}</span>
+          <span style={{ position: 'relative', left: '-70px', top: '20px', fontSize: '12px', color: '#999' }}>下载次数{this.state.download}</span>
         </Card>
         <Button onClick={this.goBack.bind(this)} style={{ marginTop: 40 }}>返回</Button>
       </div>

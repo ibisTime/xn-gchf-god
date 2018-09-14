@@ -38,28 +38,13 @@ class AllStaffAddEdit extends React.Component {
     });
   }
   clickQuery() {
-    if (getUserKind() === 'S' || getUserKind() === 'O') {
-      if (this.state.projectCodeList) {
-        let idCard = document.getElementById('idCard').value;
-        console.log(idCard);
-        if (!idCard) {
-          showWarnMsg('请输入身份证号码！');
-          return;
-        }
-        query(idCard, this.state.projectCodeList).then(data => {
-          console.log(data);
-          this.setState({ data: data });
-        });
-      }
-    }
-    if (getUserKind() === 'P') {
+    if (this.state.projectCodeList) {
       let idCard = document.getElementById('idCard').value;
       if (!idCard) {
         showWarnMsg('请输入身份证号码！');
         return;
       }
-      query1(idCard).then(data => {
-        console.log(data);
+      query(idCard, this.state.projectCodeList).then(data => {
         this.setState({ data: data });
       });
     }
@@ -67,20 +52,20 @@ class AllStaffAddEdit extends React.Component {
   render() {
     if (this.state.data) {
       var dataD = [
-        '姓名: ' + this.state.data.name,
-        '性别: ' + this.state.data.sex,
-        '民族: ' + this.state.data.idNation,
-        '籍贯: ' + this.state.data.idAddress,
-        '生日: ' + formatDate(this.state.data.birthday),
-        '签发机关: ' + this.state.data.idPolice,
-        '联系方式: ' + this.state.data.contactsMobile,
-        '证件有效时间: ' + formatDate(this.state.data.idStartDate) + '——' + formatDate(this.state.data.idEndDate)
+        '姓名: ' + this.state.data[0].name,
+        '性别: ' + this.state.data[0].sex,
+        '民族: ' + this.state.data[0].idNation,
+        '籍贯: ' + this.state.data[0].idAddress,
+        '生日: ' + formatDate(this.state.data[0].birthday),
+        '签发机关: ' + this.state.data[0].idPolice,
+        '联系方式: ' + this.state.data[0].contactsMobile,
+        '证件有效时间: ' + formatDate(this.state.data[0].idStartDate) + '——' + formatDate(this.state.data[0].idEndDate)
       ];
       var dataP = [
-        formatImg(this.state.data.pict1),
-        formatImg(this.state.data.pict2),
-        formatImg(this.state.data.pict3),
-        formatImg(this.state.data.pict4)
+        formatImg(this.state.data[0].pict1),
+        formatImg(this.state.data[0].pict2),
+        formatImg(this.state.data[0].pict3),
+        formatImg(this.state.data[0].pict4)
       ];
       var columns = [{
         title: '员工姓名',
@@ -123,23 +108,23 @@ class AllStaffAddEdit extends React.Component {
         dataIndex: 'remark'
       }];
       var dataTab = [];
-      for (let l = 0; l < this.state.data.salaryList.length; l++) {
+      for (let l = 0; l < this.state.data[0].salaryList.length; l++) {
         dataTab[l] = {
           key: l,
-          staffName: this.state.data.salaryList[l].staffName,
-          month: this.state.data.salaryList[l].month,
-          shouldAmount: moneyFormat(this.state.data.salaryList[l].shouldAmount),
-          delayHours: this.state.data.salaryList[l].delayHours,
-          earlyHours: this.state.data.salaryList[l].earlyHours,
-          leavingDays: this.state.data.salaryList[l].leavingDays,
-          tax: moneyFormat(this.state.data.salaryList[l].tax),
-          cutAmount: moneyFormat(this.state.data.salaryList[l].cutAmount),
-          cutNote: this.state.data.salaryList[l].cutNote,
-          factAmount: moneyFormat(this.state.data.salaryList[l].factAmount),
-          payAmount: moneyFormat(this.state.data.salaryList[l].payAmount),
-          latePayDatetime: formatDate(this.state.data.salaryList[l].latePayDatetime),
-          status: this.state.salaryStatus[this.state.data.salaryList[l].status],
-          remark: this.state.data.salaryList[l].remark
+          staffName: this.state.data[0].salaryList[l].staffName,
+          month: this.state.data[0].salaryList[l].month,
+          shouldAmount: moneyFormat(this.state.data[0].salaryList[l].shouldAmount),
+          delayHours: this.state.data[0].salaryList[l].delayHours,
+          earlyHours: this.state.data[0].salaryList[l].earlyHours,
+          leavingDays: this.state.data[0].salaryList[l].leavingDays,
+          tax: moneyFormat(this.state.data[0].salaryList[l].tax),
+          cutAmount: moneyFormat(this.state.data[0].salaryList[l].cutAmount),
+          cutNote: this.state.data[0].salaryList[l].cutNote,
+          factAmount: moneyFormat(this.state.data[0].salaryList[l].factAmount),
+          payAmount: moneyFormat(this.state.data[0].salaryList[l].payAmount),
+          latePayDatetime: formatDate(this.state.data[0].salaryList[l].latePayDatetime),
+          status: this.state.salaryStatus[this.state.data[0].salaryList[l].status],
+          remark: this.state.data[0].salaryList[l].remark
         };
       };
       var columnsDown = [{
@@ -171,12 +156,12 @@ class AllStaffAddEdit extends React.Component {
         dataIndex: 'updateDatetime'
       }];
       var dataDownTab = [];
-      var employList = this.state.data.employList;
+      var employList = this.state.data[0].employList;
       for (let l = 0; l < employList.length; l++) {
         dataDownTab[l] = {
           key: l,
           projectName: (employList[l] && employList[l].projectName) || '',
-          staffName: this.state.data.name,
+          staffName: this.state.data[0].name,
           joinDatetime: (employList[l] && formatDate(employList[l].joinDatetime)) || '',
           leavingDays: (employList[l] && employList[l].leavingDays) || '',
           position: (employList[l] && this.state.positionType[employList[l].position]) || '',

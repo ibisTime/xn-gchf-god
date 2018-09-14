@@ -40,7 +40,6 @@ class AllStaffErrorEdit extends React.Component {
       key: 'salaryCode',
       editCode: 631451,
       onOk: () => {
-        showSucMsg('操作成功');
         this.props.history.push(`/handleError`);
       }
     });
