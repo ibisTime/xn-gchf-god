@@ -89,7 +89,7 @@ class AllStaffHistory extends React.Component {
       buttons: [{
         code: 'detail',
         name: '详情',
-        handler: (selectedRowKeys, selectedRows) => {
+        handler: (selectedRowKeys) => {
           if (!selectedRowKeys.length) {
             showWarnMsg('请选择记录');
           } else if (selectedRowKeys.length > 1) {
@@ -98,6 +98,12 @@ class AllStaffHistory extends React.Component {
             this.props.history.push(`/staff/allStaff/history-detail?v=1&code=${selectedRowKeys[0]}`);
           }
         }
+        }, {
+          code: 'back',
+          name: '返回',
+          handler: () => {
+            this.props.history.go(-1);
+          }
       }],
       pageCode: 631465
     }) : null;

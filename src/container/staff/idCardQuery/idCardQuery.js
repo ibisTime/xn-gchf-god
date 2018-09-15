@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Input, Divider, List, Avatar, Table } from 'antd';
+import { Button, Input, Divider, List, Avatar, Table, Spin } from 'antd';
 import { getQueryString, showSucMsg, showWarnMsg, formatDate, getUserKind, getUserId, formatImg, moneyFormat } from 'common/js/util';
 import { DetailWrapper } from 'common/js/build-detail';
 import { getBankNameByCode } from 'api/project';
@@ -10,43 +10,55 @@ class AllStaffAddEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      projectCodeList: '',
+      projectCodeList: [],
       data: '',
       salaryStatus: [],
       staffStatus: [],
-      positionType: []
+      positionType: [],
+      fetching: false
     };
   }
   componentDidMount() {
-    getUserDetail(getUserId()).then((data) => {
-      this.setState({ 'projectCodeList': data.projectCodeList, 'companyCode': data.companyCode });
-    });
-    getDict('salary_status').then((res) => {
-      res.map((item) => {
+    this.setState({ fetching: true });
+    Promise.all([
+      getUserDetail(getUserId()),
+      getDict('salary_status'),
+      getDict('staff_status'),
+      getDict('position_type')
+    ]).then(([res1, res2, res3, res4]) => {
+      console.log(res1);
+      res2.map((item) => {
         this.state.salaryStatus[item.dkey] = item.dvalue;
       });
-    });
-    getDict('staff_status').then((res) => {
-      res.map((item) => {
+      res3.map((item) => {
         this.state.staffStatus[item.dkey] = item.dvalue;
       });
-    });
-    getDict('position_type').then((res) => {
-      res.map((item) => {
+      res4.map((item) => {
         this.state.positionType[item.dkey] = item.dvalue;
       });
-    });
+      this.setState({
+        projectCodeList: res1.projectCodeList,
+        companyCode: res1.companyCode,
+        fetching: false
+      });
+    }).catch(() => { this.setState({ fetching: false }); });
   }
-  clickQuery() {
+  clickQuery = () => {
+    // debugger;
+    console.log(this.state.projectCodeList);
     if (this.state.projectCodeList) {
       let idCard = document.getElementById('idCard').value;
       if (!idCard) {
         showWarnMsg('请输入身份证号码！');
         return;
       }
+      this.setState({ fetching: true });
       query(idCard, this.state.projectCodeList).then(data => {
-        this.setState({ data: data });
-      });
+        this.setState({
+          data: data,
+          fetching: false
+        });
+      }).catch(() => { this.setState({ fetching: false }); });
     }
   };
   render() {
@@ -119,14 +131,14 @@ class AllStaffAddEdit extends React.Component {
           leavingDays: this.state.data[0].salaryList[l].leavingDays,
           tax: moneyFormat(this.state.data[0].salaryList[l].tax),
           cutAmount: moneyFormat(this.state.data[0].salaryList[l].cutAmount),
-          cutNote: this.state.data[0].salaryList[l].cutNote,
+          cutNote: this.state.data[0].salaryList[l].cutNote || '无',
           factAmount: moneyFormat(this.state.data[0].salaryList[l].factAmount),
           payAmount: moneyFormat(this.state.data[0].salaryList[l].payAmount),
           latePayDatetime: formatDate(this.state.data[0].salaryList[l].latePayDatetime),
           status: this.state.salaryStatus[this.state.data[0].salaryList[l].status],
           remark: this.state.data[0].salaryList[l].remark
         };
-      };
+      }
       var columnsDown = [{
         title: '项目名称',
         dataIndex: 'projectName'
@@ -138,7 +150,7 @@ class AllStaffAddEdit extends React.Component {
         dataIndex: 'joinDatetime'
       }, {
         title: '离职时间',
-        dataIndex: 'leavingDays'
+        dataIndex: 'leavingDatetime'
       }, {
         title: '职位',
         dataIndex: 'position'
@@ -163,9 +175,9 @@ class AllStaffAddEdit extends React.Component {
           projectName: (employList[l] && employList[l].projectName) || '',
           staffName: this.state.data[0].name,
           joinDatetime: (employList[l] && formatDate(employList[l].joinDatetime)) || '',
-          leavingDays: (employList[l] && employList[l].leavingDays) || '',
+          leavingDatetime: (employList[l] && formatDate(employList[l].leavingDatetime)) || '',
           position: (employList[l] && this.state.positionType[employList[l].position]) || '',
-          totalLeavingDays: (employList[l] && employList[l].totalLeavingDays) || '',
+          totalLeavingDays: employList[l] && employList[l].totalLeavingDays,
           cutAmount: (employList[l] && moneyFormat(employList[l].cutAmount)) || '',
           status: (employList[l] && this.state.staffStatus[employList[l].status]) || '',
           updateDatetime: (employList[l] && formatDate(employList[l].updateDatetime)) || ''
@@ -173,35 +185,37 @@ class AllStaffAddEdit extends React.Component {
       };
     }
     return (
-      <div>
+      <Spin spinning={this.state.fetching}>
         <div>
-          <Input id='idCard' placeholder="身份证号码" style={{ width: 300, marginRight: 20 }} />
-          <Button onClick={this.clickQuery.bind(this)} type="primary" ghost style={{ marginRight: 10 }}>查询</Button>
+          <div>
+            <Input id='idCard' placeholder="身份证号码" style={{ width: 300, marginRight: 20 }} />
+            <Button onClick={this.clickQuery} type="primary" ghost style={{ marginRight: 10 }}>查询</Button>
+          </div>
+          <Divider orientation="left">人员信息</Divider>
+          <div style={{ marginBottom: 50 }}>
+            <List
+              bordered
+              style={{ width: 400 }}
+              dataSource={dataD}
+              renderItem={item => (<List.Item>{item}</List.Item>)}
+            />
+            <List
+              bordered
+              style={{ width: 400, marginDown: 20 }}
+              dataSource={dataP}
+              renderItem={item => (<Avatar src={item} style={{ width: 100, height: 100, margin: 20, borderColor: 'block' }} />)}
+            />
+          </div>
+          <Divider orientation="left">工资条信息</Divider>
+          <div style={{ marginBottom: 50 }}>
+            <Table columns={columns} dataSource={dataTab} bordered />
+          </div>
+          <Divider orientation="left">目前所在项目信息</Divider>
+          <div>
+            <Table columns={columnsDown} dataSource={dataDownTab} bordered />
+          </div>
         </div>
-        <Divider orientation="left">人员信息</Divider>
-        <div style={{ marginBottom: 50 }}>
-          <List
-            bordered
-            style={{ width: 400 }}
-            dataSource={dataD}
-            renderItem={item => (<List.Item>{item}</List.Item>)}
-          />
-          <List
-            bordered
-            style={{ width: 400, marginDown: 20 }}
-            dataSource={dataP}
-            renderItem={item => (<Avatar src={item} style={{ width: 100, height: 100, margin: 20, borderColor: 'block' }} />)}
-          />
-        </div>
-        <Divider orientation="left">工资条信息</Divider>
-        <div style={{ marginBottom: 50 }}>
-          <Table columns={columns} dataSource={dataTab} bordered />
-        </div>
-        <Divider orientation="left">目前所在项目信息</Divider>
-        <div>
-          <Table columns={columnsDown} dataSource={dataDownTab} bordered />
-        </div>
-      </div>
+      </Spin>
     );
   }
 }

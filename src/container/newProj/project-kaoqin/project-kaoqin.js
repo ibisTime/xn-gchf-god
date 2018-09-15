@@ -36,7 +36,6 @@ class ProjectKaoqin extends React.Component {
       companyCode: '',
       showShangban: false,
       showXiaban: false,
-      companyName: '',
       projectName: ''
     };
     this.code = getQueryString('code', this.props.location.search);
@@ -45,8 +44,7 @@ class ProjectKaoqin extends React.Component {
     getUserDetail(getUserId()).then((data) => {
       this.setState({
         projectCodeList: data.projectCodeList,
-        companyCode: data.companyCode,
-        companyName: data.companyName
+        companyCode: data.companyCode
       });
     });
     getProject(this.code).then((res) => {
@@ -130,7 +128,7 @@ class ProjectKaoqin extends React.Component {
             buttons: [{
               code: 'export',
               name: '导出',
-              handler: (selectedRowKeys, selectedRows) => {
+              handler: () => {
                 fetch(631395, { projectCode: this.code, limit: 10000, start: 1 }).then((data) => {
                   let tableData = [];
                   let title = [];
@@ -161,7 +159,7 @@ class ProjectKaoqin extends React.Component {
                   const ws = XLSX.utils.aoa_to_sheet(tableData);
                   const wb = XLSX.utils.book_new();
                   XLSX.utils.book_append_sheet(wb, ws, 'SheetJS');
-                  XLSX.writeFile(wb, this.state.companyName + this.state.projectName + '考勤记录.xlsx');
+                  XLSX.writeFile(wb, this.state.projectName + '考勤记录.xlsx');
                 });
               }
             }, {

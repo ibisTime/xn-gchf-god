@@ -97,7 +97,7 @@ class AllStaffLeaveRecords extends React.Component {
       buttons: [{
         code: 'export',
         name: '导出',
-        handler: (selectedRowKeys, selectedRows) => {
+        handler: () => {
           fetch(631468, {projectCodeList: this.state.projectCodeList, limit: 10000, start: 1}).then((data) => {
             let tableData = [];
             let title = [];
@@ -125,9 +125,16 @@ class AllStaffLeaveRecords extends React.Component {
             XLSX.writeFile(wb, '请假明细.xlsx');
           });
         }
+      }, {
+        code: 'back',
+        name: '返回',
+        handler: () => {
+          this.props.history.go(-1);
+        }
       }],
       searchParams: {
-        projectCodeList: this.state.projectCodeList
+        projectCodeList: this.state.projectCodeList,
+        staffCode: this.staffCode
       },
       pageCode: 631468
     }) : null;

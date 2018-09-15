@@ -48,7 +48,8 @@ class Chengbaoshang extends React.Component {
       search: true,
       listCode: '631357',
       params: {
-        updater: ''
+        updater: '',
+        projectCodeList: this.state.projectCodeList
       },
       keyName: 'code',
       valueName: 'name'

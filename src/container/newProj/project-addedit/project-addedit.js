@@ -9,7 +9,6 @@ import {
 } from '@redux/newProj/project-addedit';
 import { getQueryString, showSucMsg, getUserId, getUserKind, moneyFormat } from 'common/js/util';
 import { DetailWrapper } from 'common/js/build-detail';
-import fetch from 'common/js/fetch';
 import { getBankNameByCode, getBankCodeByName } from 'api/project';
 import { getUserDetail } from 'api/user';
 import { basename } from 'upath';
@@ -32,15 +31,9 @@ class ProjectAddedit extends React.Component {
     this.view = !!getQueryString('v', this.props.location.search);
   }
   componentDidMount() {
-    if (getUserKind() === 'S') {
-      getUserDetail(getUserId()).then(data => {
-        this.setState({ 'projectCodeList': data.projectCodeList });
-      });
-    } else {
-      getUserDetail(getUserId()).then(data => {
-        this.setState({ 'companyCode': data.companyCode });
-      });
-    }
+    getUserDetail(getUserId()).then(data => {
+      this.setState({ 'projectCodeList': data.projectCodeList });
+    });
   }
   render() {
     // 详情
@@ -141,27 +134,15 @@ class ProjectAddedit extends React.Component {
         return moneyFormat(v.report.nextMonthSalary);
       }
     }];
-    if (getUserKind() === 'S') {
-      return this.state.projectCodeList ? this.props.buildDetail({
-        fields,
-        key: 'code',
-        code: this.projectCode,
-        view: this.view,
-        editCode: 631352,
-        detailCode: 631358,
-        addCode: 631350
-      }) : null;
-    } else {
-      return this.props.buildDetail({
-        fields,
-        key: 'code',
-        code: this.projectCode,
-        view: this.view,
-        editCode: 631352,
-        detailCode: 631358,
-        addCode: 631350
-      });
-    }
+    return this.state.projectCodeList ? this.props.buildDetail({
+      fields,
+      key: 'code',
+      code: this.projectCode,
+      view: this.view,
+      editCode: 631352,
+      detailCode: 631358,
+      addCode: 631350
+    }) : null;
   }
 }
 

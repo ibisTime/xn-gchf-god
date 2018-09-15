@@ -48,7 +48,8 @@ class Account extends React.Component {
       search: true,
       listCode: '631357',
       params: {
-        updater: ''
+        updater: '',
+        projectCodeList: this.state.projectCodeList
       },
       keyName: 'code',
       valueName: 'name'
@@ -77,7 +78,7 @@ class Account extends React.Component {
     }, {
       field: 'keyword',
       title: '关键字',
-      placeholder: '户名/银行/关联工程',
+      placeholder: '户名/银行',
       search: true,
       hidden: true
     }];
