@@ -108,50 +108,22 @@ class AllStaffError extends React.Component {
         }
       }
     };
-    if (getUserKind() === 'O') {
-      return this.state.companyCode ? this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: {
-          staffCode: this.staffCode,
-          type: '1',
-          companyCode: this.state.companyCode,
-          kind: 'O',
-          status: 5
-        },
-        buttons: [{
-          code: 'detail',
-          name: '详情'
-        }],
-        pageCode: 631445
-      }) : null;
-    } else if (getUserKind() === 'S') {
-      return this.state.projectCodeList ? this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: {
-          projectCodeList: this.state.projectCodeList,
-          kind: 'S',
-          status: 5
-        },
-        buttons: [{
-          code: 'detail',
-          name: '详情'
-        }],
-        pageCode: 631445
-      }) : null;
-    } else {
-      return this.props.buildList({
-        fields,
-        btnEvent,
-        searchParams: { staffCode: this.staffCode, type: 'P', status: 5 },
-        buttons: [{
-          code: 'detail',
-          name: '详情'
-        }],
-        pageCode: 631445
-      });
-    }
+    return this.state.projectCodeList ? this.props.buildList({
+      fields,
+      btnEvent,
+      searchParams: {
+        projectCodeList: this.state.projectCodeList,
+        kind: 'S',
+        status: 5,
+        orderColumn: 'code',
+        orderDir: 'desc'
+      },
+      buttons: [{
+        code: 'detail',
+        name: '详情'
+      }],
+      pageCode: 631445
+    }) : null;
   }
 }
 

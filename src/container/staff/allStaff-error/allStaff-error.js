@@ -106,7 +106,9 @@ class AllStaffError extends React.Component {
       searchParams: {
         projectCodeList: this.state.projectCodeList,
         kind: 'S',
-        statusList: ['4', '6', '7']
+        statusList: ['4', '6', '7'],
+        orderColumn: 'code',
+        orderDir: 'desc'
       },
       buttons: [{
         code: 'detail',

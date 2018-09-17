@@ -54,6 +54,9 @@ class Account extends React.Component {
       keyName: 'code',
       valueName: 'name'
     }, {
+      field: 'accountName',
+      title: '户名'
+    }, {
       field: 'bankNames',
       title: '开户行',
       formatter: (v, d) => {
