@@ -59,7 +59,8 @@ export default class DetailComp extends React.Component {
       o2mSKeys: {},
       searchData: {},
       modalVisible: false,
-      modalOptions: {}
+      modalOptions: {},
+      imgUrl: ''
     };
     this.o2mFirst = {};
     this.textareas = {};
@@ -115,7 +116,10 @@ export default class DetailComp extends React.Component {
       ...this.options,
       ...options
     };
-    if (this.first) {
+    if (this.options.useData) {
+      this.props.initStates({code: this.options.code, view: this.options.view});
+      this.props.setPageData(this.options.useData);
+    } else if (this.first) {
       this.options.code && this.options.detailCode && this.getDetailInfo();
       this.props.initStates({ code: this.options.code, view: this.options.view });
     }
@@ -236,9 +240,11 @@ export default class DetailComp extends React.Component {
   }
   handleCancel = () => this.setState({ previewVisible: false })
   handlePreview = (file) => {
+    let url = file.url || file.thumbUrl;
     this.setState({
-      previewImage: file.url || file.thumbUrl,
-      previewVisible: true
+      previewImage: url,
+      previewVisible: true,
+      imgUrl: url + '?attname=' + file.key + '.jpg'
     });
   }
   handleFilePreview = (file) => {
@@ -321,7 +327,7 @@ export default class DetailComp extends React.Component {
     }
   }
   getPageComponent = (children) => {
-    const { previewImage, previewVisible } = this.state;
+    const { previewImage, previewVisible, imgUrl } = this.state;
     return (
       <Spin spinning={this.props.fetching}>
         <Form className="detail-form-wrapper" onSubmit={this.handleSubmit}>
@@ -329,6 +335,9 @@ export default class DetailComp extends React.Component {
         </Form>
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img alt="图片" style={{ width: '100%' }} src={previewImage} />
+          <div className="down-wrap">
+            <Button style={{marginLeft: 20}} onClick={() => { location.href = imgUrl; }} icon="download">下载</Button>
+          </div>
         </Modal>
       </Spin>
     );
@@ -482,7 +491,34 @@ export default class DetailComp extends React.Component {
         check: true
       }];
     }
-    return item.readonly ? null : (
+    return item.readonly ? (
+        item.options.detail ? <Button
+            type="primary"
+            disabled={!hasSelected}
+            style={{marginRight: 20, marginBottom: 16}}
+            onClick={() => {
+              let keys = this.state.o2mSKeys[item.field];
+              if (!keys.length || keys.length > 1) {
+                showWarnMsg('请选择一条记录');
+                return;
+              }
+              let key = keys[0];
+              let keyName = item.options.rowKey || 'code';
+              let useData = this.props.pageData[item.field].filter((v) => v[keyName] === key)[0];
+              this.setState({
+                modalOptions: {
+                  ...item.options,
+                  code: key,
+                  view: true,
+                  useData
+                }
+              }, () => {
+                this.setState({
+                  modalVisible: true
+                });
+              });
+            }}
+        >详情</Button> : null) : (
       <div style={{ marginBottom: 16 }}>
         {item.options.add ? <Button
           type="primary"

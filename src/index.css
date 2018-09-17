@@ -296,3 +296,9 @@ html {
 .ant-menu-dark .ant-menu-item, .ant-menu-dark .ant-menu-item-group-title, .ant-menu-dark .ant-menu-item > a {
     color: #fff;
 }
+
+.down-wrap{
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+}

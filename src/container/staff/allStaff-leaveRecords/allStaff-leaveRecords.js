@@ -98,7 +98,7 @@ class AllStaffLeaveRecords extends React.Component {
         code: 'export',
         name: '导出',
         handler: () => {
-          fetch(631468, {projectCodeList: this.state.projectCodeList, limit: 10000, start: 1}).then((data) => {
+          fetch(631468, {projectCodeList: this.state.projectCodeList, staffCode: this.staffCode, limit: 10000, start: 1}).then((data) => {
             let tableData = [];
             let title = [];
             fields.map((item) => {

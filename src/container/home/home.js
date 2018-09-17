@@ -4,6 +4,7 @@ import AccumulatePie from 'component/accumulate-pie/accumulate-pie';
 import MoneyLine from 'component/money-line/money-line';
 import ThirtyPie from 'component/thirty-pie/thirty-pie';
 import fetch, { fetchImg } from 'common/js/fetch';
+import { Switch, Link } from 'react-router-dom';
 import { formatDate, getUserKind, moneyFormat, isUndefined, getUserId } from 'common/js/util';
 import { getProject, getProjectList, getPagePayCode, getPageChecks, getPageabnormal, getTotalSalary } from 'api/project';
 import { getUserDetail } from 'api/user';
@@ -144,7 +145,8 @@ class Home extends React.Component {
       options: [],
       activeKey: [],
       seclectProjcode: '',
-      moneyLine: []
+      moneyLine: [],
+      projectCodeList: []
     };
   }
   componentDidMount() {
@@ -211,6 +213,7 @@ class Home extends React.Component {
   getProjectList() {
     this.points = {};
     getUserDetail(getUserId()).then((data) => {
+      this.setState({ projectCodeList: data.projectCodeList });
       getProjectList(getUserKind(), data.projectCodeList, data.companyCode).then(data => {
         this.data = data;
         data.forEach((item, i) => {
@@ -232,7 +235,7 @@ class Home extends React.Component {
   markerClick = (e) => {
     this.code = e.target.content.code;
     this.setState({
-      seclectProjcode: this.code
+      seclectProjcode: this.code || this.state.projectCodeList[0]
     });
     this.getDetail(e.target.content.code);
     this.getSalary(e.target.content.code);
@@ -264,6 +267,8 @@ class Home extends React.Component {
         this.camera();
       });
     }
+    this.getPageabnormal(1, 10);
+    this.getPageChecks(1, 10);
   }
   // 获取项目详情
   getDetail(code) {
@@ -317,23 +322,27 @@ class Home extends React.Component {
   }
   collapseChange = (key) => {
     if (key === '1') {
-      let { payPagination, payData } = this.state;
-      if (!payData.length && payPagination.hasMore) {
-        this.getPagePay(1, 10);
-      }
-      this.setState({ activeKey: [1] });
+      window.location.href = '/daifa/daifa';
+      // let { payPagination, payData } = this.state;
+      // if (!payData.length && payPagination.hasMore) {
+      //   this.getPagePay(1, 10);
+      // }
+      // this.setState({ activeKey: [1] });
     } else if (key === '2') {
-      let { checkPagination, checkData } = this.state;
-      if (!checkData.length && checkPagination.hasMore) {
-        this.getPageChecks(1, 10);
-      }
-      this.setState({ activeKey: [2] });
+      window.location.href = '/newProj/kaoqin';
+      // let { checkPagination, checkData } = this.state;
+      // if (!checkData.length && checkPagination.hasMore) {
+      //   this.getPageChecks(1, 10);
+      // }
+      // this.setState({ activeKey: [2] });
     } else if (key === '3') {
-      let { abnormalPagination, abnormalData } = this.state;
-      if (!abnormalData.length && abnormalPagination.hasMore) {
-        this.getPageabnormal(1, 10);
-      }
-      this.setState({ activeKey: [3] });
+      window.location.href = '/handleError';
+      // this.props.history.push('/handleError');
+      // let { abnormalPagination, abnormalData } = this.state;
+      // if (!abnormalData.length && abnormalPagination.hasMore) {
+      //   this.getPageabnormal(1, 10);
+      // }
+      // this.setState({ activeKey: [3] });
     } else {
       this.setState({ activeKey: [] });
     }
@@ -348,7 +357,6 @@ class Home extends React.Component {
       pager = { ...this.state.abnormalPagination };
     }
     pager.current = pagination.current;
-    // debugger;
     if (isPay === 1) {
       this.setState({
         payPagination: pager,
@@ -390,8 +398,9 @@ class Home extends React.Component {
   }
   // 分页查询项目考勤
   getPageChecks(start, limit) {
+    let code = this.code || this.state.projectCodeList[0];
     this.setState({ checkLoading: true });
-    getPageChecks(start, limit, this.code).then((data) => {
+    getPageChecks(start, limit, code).then((data) => {
       let { checkPagination } = this.state;
       this.setState({
         checkPagination: {
@@ -409,8 +418,9 @@ class Home extends React.Component {
   }
   // 分页查询异常信息
   getPageabnormal(start, limit) {
+    let code = this.code || this.state.projectCodeList[0];
     this.setState({ abnormalLoading: true });
-    getPageabnormal(start, limit, this.code).then((data) => {
+    getPageabnormal(start, limit, code).then((data) => {
       let { abnormalPagination } = this.state;
       this.setState({
         abnormalPagination: {

@@ -104,7 +104,7 @@ class DaifaAddEdit extends React.Component {
           this.props.history.go(-1);
         }
       }],
-      searchParams: { messageCode: this.code, projectCodeList: projectCodeList },
+      searchParams: { messageCode: this.code },
       pageCode: 631445,
       head: (
           <div className="daifa-addedit-tip">

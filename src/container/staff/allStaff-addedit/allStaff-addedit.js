@@ -27,93 +27,12 @@ class AllStaffAddEdit extends React.Component {
     this.view = !!getQueryString('v', this.props.location.search);
   }
   componentDidMount() {
-    if (getUserKind() === 'S') {
-      getUserDetail(getUserId()).then((data) => {
-        this.setState({ 'projectCodeList': data.projectCodeList });
-      });
-    };
-    if (getUserKind() === 'O') {
-      getUserDetail(getUserId()).then((data) => {
-        console.log(data.companyCode);
-        this.setState({ companyCode: data.companyCode });
-      });
-    };
+    getUserDetail(getUserId()).then((data) => {
+      this.setState({ 'projectCodeList': data.projectCodeList });
+    });
   }
   render() {
     const fields = [{
-      field: 'name',
-      title: '姓名',
-      required: true,
-      readonly: true
-    }, {
-      field: 'idAddress',
-      title: '身份证上籍贯',
-      required: true,
-      readonly: true
-    }, {
-      field: 'mobile',
-      title: '联系方式',
-      required: true
-    }, {
-      field: 'idNo',
-      title: '证件号',
-      required: true,
-      readonly: true
-    }, {
-      field: 'pict1',
-      title: '免冠照片',
-      single: true,
-      type: 'img',
-      required: true
-    }, {
-      field: 'pict2',
-      title: '身份证正面照片',
-      single: true,
-      type: 'img',
-      required: true
-    }, {
-      field: 'pict3',
-      title: '身份证反面照片',
-      single: true,
-      type: 'img',
-      required: true
-    }, {
-      field: 'pict4',
-      title: '手持身份证照片',
-      single: true,
-      type: 'img',
-      required: true
-    }, {
-      title: '技能列表',
-      field: 'skillList',
-      type: 'o2m',
-      options: {
-        add: true,
-        edit: true,
-        delete: true,
-        scroll: { x: 600 },
-        fields: [
-          {
-            title: '技能名称',
-            field: 'name',
-            nowrap: true,
-            width: 80
-          },
-          {
-            title: '技能证书',
-            field: 'pdf',
-            type: 'img',
-            single: true
-          },
-          {
-            title: '技能分数',
-            field: 'score',
-            date100: true
-          }
-        ]
-      }
-    }];
-    const fieldos = [{
       field: 'name',
       title: '姓名',
       required: true
@@ -186,10 +105,12 @@ class AllStaffAddEdit extends React.Component {
       title: '技能列表',
       field: 'skillList',
       type: 'o2m',
+      readonly: true,
       options: {
         add: true,
         edit: true,
         delete: true,
+        detail: true,
         scroll: { x: 600 },
         fields: [
           {
@@ -212,7 +133,7 @@ class AllStaffAddEdit extends React.Component {
       }
     }];
     return this.props.buildDetail({
-      fields: this.view ? fieldos : fields,
+      fields,
       code: this.code,
       view: this.view,
       detailCode: 631417,
